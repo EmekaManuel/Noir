@@ -2,23 +2,19 @@
 
 import { useWalletUi } from "@wallet-ui/react";
 import {
-  Activity,
   ArrowRight,
-  Globe,
-  Handshake,
-  Shield,
-  TrendingUp,
-  Users,
+  Brain,
+  Lock,
   Zap,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { WalletButton } from "@/components/solana/solana-provider";
-import { Badge } from "@/components/ui/badge";
+import { ThemeSelect } from "@/components/theme-select";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -40,37 +36,30 @@ export function DealforgeHomePage() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-14 items-center justify-between px-4">
           <div className="flex items-center space-x-2">
-            <div className="rounded-lg bg-primary p-2">
-              <Handshake className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl">DealForge</span>
+            <span className="font-semibold text-xl tracking-tight">Noir OTC</span>
           </div>
-          <WalletButton />
+          <div className="flex items-center gap-2">
+            <ThemeSelect />
+            <WalletButton />
+          </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto relative py-24 lg:py-32">
-        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-          <Badge className="mb-4" variant="outline">
-            <Activity className="mr-2 h-3 w-3" />
-            Live on Solana Mainnet
-          </Badge>
-
-          <h1 className="mb-6 font-bold text-4xl tracking-tighter sm:text-6xl md:text-7xl">
-            Decentralized
-            <span className="text-primary"> OTC Trading</span>
+      <section className="container mx-auto relative py-32 lg:py-40">
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <h1 className="mb-6 font-semibold text-5xl tracking-tight sm:text-6xl md:text-7xl">
+            Private OTC Trading
           </h1>
 
-          <p className="mb-8 max-w-[600px] text-lg text-muted-foreground sm:text-xl">
-            Create secure escrow offers and trade tokens directly with other
-            users. Built on Solana for lightning-fast transactions with minimal
-            fees.
+          <p className="mb-12 max-w-[640px] text-lg leading-relaxed text-muted-foreground sm:text-xl">
+            Institutional-grade over-the-counter trading with zero-knowledge privacy
+            and AI-powered risk management. Trade large blocks without market impact.
           </p>
 
           {!account && (
             <div className="flex items-center gap-2 text-muted-foreground text-sm">
-              <span>Connect your wallet to get started</span>
+              <span>Connect wallet to continue</span>
               <ArrowRight className="h-4 w-4" />
             </div>
           )}
@@ -78,161 +67,87 @@ export function DealforgeHomePage() {
       </section>
 
       {/* Metrics Section */}
-      <section className="container mx-auto py-16">
-        <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-muted-foreground text-sm">
+      <section className="container mx-auto py-20">
+        <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-3">
+          <Card className="border-0 bg-muted/30">
+            <CardHeader className="space-y-0 pb-3">
+              <CardTitle className="text-sm font-normal text-muted-foreground">
                 Total Volume
               </CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="font-bold text-2xl">$2.4M</div>
-              <div className="flex items-center space-x-2 text-muted-foreground text-xs">
-                <TrendingUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-emerald-500">+20.1%</span>
-                <span>from last month</span>
-              </div>
+              <div className="text-3xl font-semibold">$2.4M</div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-muted-foreground text-sm">
+          <Card className="border-0 bg-muted/30">
+            <CardHeader className="space-y-0 pb-3">
+              <CardTitle className="text-sm font-normal text-muted-foreground">
                 Active Offers
               </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="font-bold text-2xl">1,248</div>
-              <div className="flex items-center space-x-2 text-muted-foreground text-xs">
-                <TrendingUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-emerald-500">+12.5%</span>
-                <span>from last week</span>
-              </div>
+              <div className="text-3xl font-semibold">1,248</div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-muted-foreground text-sm">
-                Avg Transaction Time
+          <Card className="border-0 bg-muted/30">
+            <CardHeader className="space-y-0 pb-3">
+              <CardTitle className="text-sm font-normal text-muted-foreground">
+                Settlement Time
               </CardTitle>
-              <Zap className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="font-bold text-2xl">0.4s</div>
-              <div className="flex items-center space-x-2 text-muted-foreground text-xs">
-                <TrendingUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-emerald-500">99.9%</span>
-                <span>success rate</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="font-medium text-muted-foreground text-sm">
-                Platform Fees
-              </CardTitle>
-              <Shield className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="font-bold text-2xl">0%</div>
-              <div className="text-muted-foreground text-xs">
-                Always free to use
-              </div>
+              <div className="text-3xl font-semibold">&lt;1s</div>
             </CardContent>
           </Card>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto py-16">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="mb-4 font-bold text-3xl tracking-tighter sm:text-4xl">
-            Why Choose DealForge?
-          </h2>
-          <p className="mb-12 text-lg text-muted-foreground">
-            Experience the future of decentralized trading with our cutting-edge
-            platform
-          </p>
-        </div>
+      <section className="container mx-auto py-24">
+        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <Lock className="h-5 w-5 text-muted-foreground" />
+              <h3 className="text-lg font-semibold">Zero-Knowledge Privacy</h3>
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Trade details remain private through zk-proof verification. Prove
+              transaction validity without revealing sensitive information.
+            </p>
+          </div>
 
-        <div className="mx-auto mt-12 grid max-w-5xl gap-6 lg:grid-cols-3">
-          <Card className="group relative overflow-hidden border-0 bg-gradient-to-br from-chart-4/10 to-chart-4/5 transition-all hover:shadow-lg">
-            <CardHeader>
-              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-chart-4/20">
-                <Zap className="h-5 w-5 text-chart-4" />
-              </div>
-              <CardTitle>Lightning Fast</CardTitle>
-              <CardDescription>
-                Built on Solana's high-performance blockchain for instant
-                settlements
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">
-                Execute trades in milliseconds with minimal transaction costs.
-                Our platform leverages Solana's speed for the best trading
-                experience.
-              </p>
-            </CardContent>
-          </Card>
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <Brain className="h-5 w-5 text-muted-foreground" />
+              <h3 className="text-lg font-semibold">AI Risk Management</h3>
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Automated counterparty analysis and risk assessment. Real-time
+              monitoring ensures secure, compliant transactions.
+            </p>
+          </div>
 
-          <Card className="group relative overflow-hidden border-0 bg-gradient-to-br from-chart-2/10 to-chart-2/5 transition-all hover:shadow-lg">
-            <CardHeader>
-              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-chart-2/20">
-                <Shield className="h-5 w-5 text-chart-2" />
-              </div>
-              <CardTitle>Secure Escrow</CardTitle>
-              <CardDescription>
-                Smart contracts ensure safe token swaps with automatic
-                settlement
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">
-                Your funds are protected by battle-tested smart contracts. Trade
-                with confidence knowing your assets are secure.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="group relative overflow-hidden border-0 bg-gradient-to-br from-chart-1/10 to-chart-1/5 transition-all hover:shadow-lg">
-            <CardHeader>
-              <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-chart-1/20">
-                <Globe className="h-5 w-5 text-chart-1" />
-              </div>
-              <CardTitle>Fully Decentralized</CardTitle>
-              <CardDescription>
-                No intermediaries, trade directly peer-to-peer with full control
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm">
-                Maintain complete control over your assets. No centralized
-                authority, no single point of failure.
-              </p>
-            </CardContent>
-          </Card>
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <Zap className="h-5 w-5 text-muted-foreground" />
+              <h3 className="text-lg font-semibold">Instant Settlement</h3>
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Solana-powered escrow contracts execute in under a second. No
+              waiting periods, no intermediaries.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="container mx-auto py-24">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="mb-4 font-bold text-3xl tracking-tighter">
-            Ready to Start Trading?
-          </h2>
-          <p className="mb-8 text-lg text-muted-foreground">
-            Join thousands of traders already using DealForge for secure, fast,
-            and decentralized OTC trading.
-          </p>
           {!account && (
-            <div className="flex items-center justify-center gap-2 text-muted-foreground">
-              <span>Connect your wallet above to access the platform</span>
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <span>Connect wallet to access</span>
               <ArrowRight className="h-4 w-4" />
             </div>
           )}
@@ -240,18 +155,122 @@ export function DealforgeHomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-muted/50">
-        <div className="container mx-auto py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="rounded-lg bg-primary p-1.5">
-                <Handshake className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="font-semibold">DealForge</span>
+      <footer className="border-t bg-muted/30">
+        <div className="container mx-auto py-12">
+          <div className="grid gap-8 md:grid-cols-4">
+            {/* Brand */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-lg">Noir OTC</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Institutional-grade OTC trading with zero-knowledge privacy
+                and AI-powered risk management.
+              </p>
             </div>
-            <p className="text-muted-foreground text-sm">
-              Built with ❤️ on Solana
-            </p>
+
+            {/* Product */}
+            <div className="space-y-4">
+              <h4 className="font-medium text-sm">Product</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <Link
+                    href="/dashboard"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard/create-offer"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Create Offer
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/account"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Account
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div className="space-y-4">
+              <h4 className="font-medium text-sm">Company</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a
+                    href="#"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Documentation
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Support
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div className="space-y-4">
+              <h4 className="font-medium text-sm">Legal</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a
+                    href="#"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    Risk Disclosure
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="mt-12 border-t pt-8">
+            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+              <p className="text-xs text-muted-foreground">
+                © {new Date().getFullYear()} Noir OTC. All rights reserved.
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Built on Solana
+              </p>
+            </div>
           </div>
         </div>
       </footer>
