@@ -5,9 +5,12 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   Brain,
+  ExternalLink,
+  Heart,
   Lock,
   Plus,
   Search,
+  Shield,
   Zap,
 } from "lucide-react";
 import Link from "next/link";
@@ -190,109 +193,232 @@ export function DealforgeHomePage() {
         </div>
       </section>
 
+      {/* Join the Degens Section */}
+      <section className="container mx-auto py-20 relative z-10">
+        <div className="mx-auto flex max-w-4xl flex-col items-center text-center mb-12">
+          <h2 className="mb-4 font-bold text-5xl tracking-tight sm:text-6xl">
+            Join the{" "}
+            <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Degens
+            </span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl">
+            Connect with the most active memecoin trading community on Solana.
+          </p>
+        </div>
+
+        <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+          {/* Twitter Card */}
+          <Card className="border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
+            <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2">
+                <svg
+                  className="h-8 w-8"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.243-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.496 5.853L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z" />
+                </svg>
+              </div>
+              <CardTitle className="text-xl font-bold">Twitter</CardTitle>
+              <p className="text-sm text-muted-foreground">@meme_otc</p>
+              <Button
+                variant="ghost"
+                className="group"
+                asChild
+              >
+                <a
+                  href="https://twitter.com/meme_otc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Join Community
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Telegram Card */}
+          <Card className="border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
+            <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2">
+                <svg
+                  className="h-8 w-8"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.12l-6.87 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
+                </svg>
+              </div>
+              <CardTitle className="text-xl font-bold">Telegram</CardTitle>
+              <p className="text-sm text-muted-foreground">t.me/meme_otc</p>
+              <Button
+                variant="ghost"
+                className="group"
+                asChild
+              >
+                <a
+                  href="https://t.me/meme_otc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Join Community
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Most Traded Tokens Card */}
+          <Card className="border bg-card/50 backdrop-blur-sm">
+            <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+              <CardTitle className="text-xl font-bold">Most Traded Tokens</CardTitle>
+              <p className="text-sm text-muted-foreground">Coming Soon</p>
+              <p className="text-xs text-muted-foreground">
+                Real trading data will appear here once the platform goes live
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Biggest OTC Buys Card */}
+          <Card className="border bg-card/50 backdrop-blur-sm">
+            <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+              <CardTitle className="text-xl font-bold">Biggest OTC Buys</CardTitle>
+              <p className="text-sm text-muted-foreground">Coming Soon</p>
+              <p className="text-xs text-muted-foreground">
+                Top traders will be featured here once deals are completed
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* How MemeOTC Works Section */}
+      <section className="container mx-auto py-20 relative z-10">
+        <div className="mx-auto flex max-w-4xl flex-col items-center text-center mb-12">
+          <h2 className="mb-4 font-bold text-4xl tracking-tight sm:text-5xl">
+            How Noir Works
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl">
+            Three simple steps to privately exchange any Solana memecoin with zero slippage, no front-running, and full escrow protection.
+          </p>
+        </div>
+
+        <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3 mb-12">
+          {/* Card 1: Create Your Listing */}
+          <Card className="border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
+            <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2">
+                <span className="text-2xl font-bold">01</span>
+              </div>
+              <CardTitle className="text-xl font-bold">Create Your Listing</CardTitle>
+            </CardContent>
+          </Card>
+
+          {/* Card 2: Escrow Protection */}
+          <Card className="border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
+            <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2">
+                <Shield className="h-8 w-8" />
+              </div>
+              <CardTitle className="text-xl font-bold">Escrow Protection</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Once a buyer accepts, funds are locked in a smart contract. Neither party can rug — guaranteed.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Card 3: Settle Instantly */}
+          <Card className="border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
+            <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-2">
+                <Zap className="h-8 w-8" />
+              </div>
+              <CardTitle className="text-xl font-bold">Settle Instantly</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                SOL is released to the seller. Tokens are released to the buyer. Private, peer-to-peer. No middlemen.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Call to Action Section */}
+        <Card className="mx-auto max-w-4xl border bg-card/50 backdrop-blur-sm">
+          <CardContent className="p-8 flex flex-col items-center text-center space-y-6">
+            <p className="text-base text-muted-foreground max-w-2xl">
+              Specify your SPL token, amount, and asking price in SOL. Your offer is now live for OTC buyers.
+            </p>
+            <Button
+              asChild
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+            >
+              <Link href="/dashboard/create-offer">
+                Create Your First Listing
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </section>
+
       {/* Footer */}
       <footer className="border-t bg-muted/30">
         <div className="container mx-auto py-12">
-          <div className="grid gap-8 md:grid-cols-4">
-            {/* Brand */}
+          <div className="grid gap-8 md:grid-cols-2">
+            {/* Left: Brand */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-lg">Noir OTC</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Institutional-grade OTC trading with zero-knowledge privacy
-                and AI-powered risk management.
+              <h3 className="font-bold text-3xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Noir
+              </h3>
+              <p className="text-sm leading-relaxed text-muted-foreground max-w-md">
+                A peer-to-peer OTC desk for Solana memecoins. List tokens, set your price, and settle directly with buyers.
               </p>
-            </div>
-
-            {/* Product */}
-            <div className="space-y-4">
-              <h4 className="font-medium text-sm">Product</h4>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <Link
-                    href="/dashboard"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
+              <div className="flex items-center gap-3">
+                <button className="flex h-10 w-10 items-center justify-center rounded-full border border-muted-foreground/30 hover:border-foreground/50 transition-colors">
+                  <Heart className="h-5 w-5 text-muted-foreground" />
+                </button>
+                <a
+                  href="https://t.me/meme_otc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-muted-foreground/30 hover:border-foreground/50 transition-colors"
+                >
+                  <svg
+                    className="h-5 w-5 text-muted-foreground"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
-                    Browse Deals
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/dashboard/create-offer"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Create Deal
-                  </Link>
-                </li>
-                {account && (
-                  <li>
-                    <Link
-                      href="/dashboard/my-deals"
-                      className="text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      My Deals
-                    </Link>
-                  </li>
-                )}
-              </ul>
-            </div>
-
-            {/* Company */}
-            <div className="space-y-4">
-              <h4 className="font-medium text-sm">Company</h4>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <a
-                    href="#"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Support
-                  </a>
-                </li>
-              </ul>
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.12l-6.87 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" />
+                  </svg>
+                </a>
               </div>
+            </div>
 
-            {/* Legal */}
+            {/* Right: Community */}
             <div className="space-y-4">
-              <h4 className="font-medium text-sm">Legal</h4>
-              <ul className="space-y-3 text-sm">
+              <h4 className="font-bold text-lg">Community</h4>
+              <ul className="space-y-2 text-sm">
                 <li>
                   <a
-                    href="#"
+                    href="https://t.me/meme_otc"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    Terms of Service
+                    Telegram
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="https://twitter.com/meme_otc"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Risk Disclosure
+                    Twitter
                   </a>
                 </li>
               </ul>
@@ -303,11 +429,28 @@ export function DealforgeHomePage() {
           <div className="mt-12 border-t pt-8">
             <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
               <p className="text-xs text-muted-foreground">
-                © {new Date().getFullYear()} Noir OTC. All rights reserved.
+                © {new Date().getFullYear()} Noir. All rights reserved.
               </p>
-              <p className="text-xs text-muted-foreground">
-                Built on Solana
-              </p>
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                <a
+                  href="#"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Privacy Policy
+                </a>
+                <a
+                  href="#"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Terms of Service
+                </a>
+                <a
+                  href="#"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Cookie Policy
+                </a>
+              </div>
             </div>
           </div>
         </div>
