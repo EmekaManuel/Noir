@@ -6,13 +6,12 @@ import {
   ArrowRight,
   Brain,
   Lock,
+  Plus,
+  Search,
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
-import { WalletButton } from "@/components/solana/solana-provider";
-import { ThemeSelect } from "@/components/theme-select";
+import { NoirHeader } from "@/components/dealforge/noir-header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,33 +22,6 @@ import {
 
 export function DealforgeHomePage() {
   const { account } = useWalletUi();
-  const router = useRouter();
-  const walletButtonRef = useRef<HTMLDivElement>(null);
-
-  // Redirect to dashboard if wallet is connected
-  useEffect(() => {
-    if (account) {
-      router.push("/dashboard");
-    }
-  }, [account, router]);
-
-  const handleConnectWallet = () => {
-    // Trigger click on the wallet button in the header
-    // Try multiple selectors to find the wallet button
-    const walletButton = walletButtonRef.current?.querySelector("button") ||
-      walletButtonRef.current?.querySelector("[data-slot='button']") ||
-      walletButtonRef.current?.querySelector(".wallet-adapter-button-trigger");
-    
-    if (walletButton) {
-      (walletButton as HTMLButtonElement).click();
-    } else {
-      // Fallback: try to find any button in the wallet button container
-      const buttons = walletButtonRef.current?.querySelectorAll("button");
-      if (buttons && buttons.length > 0) {
-        (buttons[0] as HTMLButtonElement).click();
-      }
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
@@ -57,21 +29,7 @@ export function DealforgeHomePage() {
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-muted/20" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]" />
       
-      {/* Header Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60">
-              <span className="text-sm font-bold text-primary-foreground">N</span>
-            </div>
-            <span className="font-semibold text-xl tracking-tight">Noir OTC</span>
-          </div>
-          <div className="flex items-center gap-2" ref={walletButtonRef}>
-            <ThemeSelect />
-            <WalletButton />
-          </div>
-        </div>
-      </header>
+      <NoirHeader />
 
       {/* Hero Section */}
       <section className="container mx-auto relative py-20 lg:py-28">
@@ -100,16 +58,41 @@ export function DealforgeHomePage() {
             and AI-powered risk management. Trade large blocks without market impact.
           </motion.p>
 
-          {!account && (
-            <Button
-              onClick={handleConnectWallet}
-              className="group inline-flex items-center gap-2 rounded-lg border bg-card hover:bg-card/80 px-6 py-2 text-sm font-medium shadow-sm transition-all hover:shadow-md"
-              variant="outline"
-            >
-              <span>Connect wallet to continue</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          )}
+          <div className="flex items-center gap-4">
+            {account ? (
+              <>
+                <Button
+                  asChild
+                  className="group inline-flex items-center gap-2"
+                >
+                  <Link href="/dashboard/create-offer">
+                    <Plus className="h-4 w-4" />
+                    <span>Create Deal</span>
+                  </Link>
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="group inline-flex items-center gap-2"
+                >
+                  <Link href="/dashboard">
+                    <Search className="h-4 w-4" />
+                    <span>Browse Deals</span>
+                  </Link>
+                </Button>
+              </>
+            ) : (
+              <Button
+                asChild
+                className="group inline-flex items-center gap-2"
+              >
+                <Link href="/dashboard">
+                  <span>Connect wallet to continue</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            )}
+            </div>
         </div>
       </section>
 
@@ -207,18 +190,6 @@ export function DealforgeHomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="container mx-auto py-12 relative z-10">
-        <div className="mx-auto max-w-2xl text-center">
-          {!account && (
-            <div className="inline-flex items-center gap-2 rounded-lg border bg-card/50 backdrop-blur-sm px-4 py-2 text-sm text-muted-foreground shadow-sm">
-              <span>Connect wallet to access</span>
-              <ArrowRight className="h-4 w-4" />
-            </div>
-          )}
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="border-t bg-muted/30">
         <div className="container mx-auto py-12">
@@ -241,7 +212,7 @@ export function DealforgeHomePage() {
                     href="/dashboard"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    Dashboard
+                    Browse Deals
                   </Link>
                 </li>
                 <li>
@@ -249,17 +220,19 @@ export function DealforgeHomePage() {
                     href="/dashboard/create-offer"
                     className="text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    Create Offer
+                    Create Deal
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/account"
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    Account
-                  </Link>
-                </li>
+                {account && (
+                  <li>
+                    <Link
+                      href="/dashboard/my-deals"
+                      className="text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      My Deals
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
 
@@ -292,7 +265,7 @@ export function DealforgeHomePage() {
                   </a>
                 </li>
               </ul>
-            </div>
+              </div>
 
             {/* Legal */}
             <div className="space-y-4">

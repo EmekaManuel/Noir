@@ -1,8 +1,6 @@
+import { NoirHeader } from "@/components/dealforge/noir-header";
 import type { Metadata } from "next";
 import type React from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SiteHeader } from "@/components/site-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
   title: "Deal Forge",
@@ -13,16 +11,14 @@ export default function DashboardLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <SiteHeader />
+    <>
+   <NoirHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="px-6">{children}</div>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+    </>
+    
   );
 }

@@ -224,7 +224,11 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
   );
 }
 
-export function OfferListing() {
+interface OfferListingProps {
+  readonly filterByMaker?: string;
+}
+
+export function OfferListing({ filterByMaker }: OfferListingProps = {}) {
   const programId = useDealforgeProgramId();
   const { accounts, isLoading: addressesLoading } = useProgramAccounts({
     program: programId,
@@ -267,7 +271,15 @@ export function OfferListing() {
   } | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const allOffers = data?.pages.flat() || [];
+  const allOffers = useMemo(() => {
+    const offers = data?.pages.flat() || [];
+    if (filterByMaker) {
+      return offers.filter(
+        (offer) => offer.account.data.maker.toString() === filterByMaker
+      );
+    }
+    return offers;
+  }, [data, filterByMaker]);
 
   const handleOfferClick = (offer: {
     pubkey: Address;
