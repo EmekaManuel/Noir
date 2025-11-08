@@ -48,7 +48,7 @@ export function DealforgeHomePage() {
             transition={{ duration: 0.6 }}
             className="mb-6 font-bold text-5xl tracking-tight sm:text-6xl md:text-7xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent"
           >
-            Private Meme OTC Trading
+            Noir Meme OTC Trading
           </motion.h1>
 
           <motion.p
@@ -60,6 +60,42 @@ export function DealforgeHomePage() {
             Institutional-grade over-the-counter trading with zero-knowledge privacy
             and AI-powered risk management. Trade large blocks without market impact.
           </motion.p>
+
+    {/* Features Section */}
+    <section className="container mx-auto pb-12 relative z-10">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-3">
+          <div className="group flex items-center gap-3 rounded-full border bg-card/50 backdrop-blur-sm px-4 py-2.5 transition-all hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-blue-500/20 hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 transition-all group-hover:from-purple-500/30 group-hover:to-blue-500/30 group-hover:scale-110">
+              <Lock className="h-4 w-4 text-primary transition-colors group-hover:text-purple-400" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold transition-colors group-hover:text-purple-300">Zero-Knowledge Privacy</span>
+              <span className="text-xs text-muted-foreground transition-colors group-hover:text-purple-400/80">zk-proof verification</span>
+            </div>
+          </div>
+
+          <div className="group flex items-center gap-3 rounded-full border bg-card/50 backdrop-blur-sm px-4 py-2.5 transition-all hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-rose-500/20 hover:border-pink-500/50 hover:shadow-lg hover:shadow-pink-500/20">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 transition-all group-hover:from-pink-500/30 group-hover:to-rose-500/30 group-hover:scale-110">
+              <Brain className="h-4 w-4 text-primary transition-colors group-hover:text-pink-400" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold transition-colors group-hover:text-pink-300">AI Risk Management</span>
+              <span className="text-xs text-muted-foreground transition-colors group-hover:text-pink-400/80">automated analysis</span>
+            </div>
+          </div>
+
+          <div className="group flex items-center gap-3 rounded-full border bg-card/50 backdrop-blur-sm px-4 py-2.5 transition-all hover:bg-gradient-to-r hover:from-yellow-500/20 hover:to-orange-500/20 hover:border-yellow-500/50 hover:shadow-lg hover:shadow-yellow-500/20">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 transition-all group-hover:from-yellow-500/30 group-hover:to-orange-500/30 group-hover:scale-110">
+              <Zap className="h-4 w-4 text-primary transition-colors group-hover:text-yellow-400" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold transition-colors group-hover:text-yellow-300">Instant Settlement</span>
+              <span className="text-xs text-muted-foreground transition-colors group-hover:text-yellow-400/80">&lt;1s execution</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
           <div className="flex items-center gap-4">
             {account ? (
@@ -100,99 +136,53 @@ export function DealforgeHomePage() {
       </section>
 
       {/* Metrics Section */}
-      <section className="container mx-auto py-4 relative z-10">
-        <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-3">
-          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
-            <CardHeader className="space-y-0 pb-3">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                Total Volume
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">$2.4M</div>
-              <div className="mt-2 text-xs text-emerald-500 font-medium">+20.1% this month</div>
-            </CardContent>
-          </Card>
-
-          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
-            <CardHeader className="space-y-0 pb-3">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                Active Offers
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">1,248</div>
-              <div className="mt-2 text-xs text-emerald-500 font-medium">+12.5% this week</div>
-            </CardContent>
-          </Card>
-
-          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
-            <CardHeader className="space-y-0 pb-3">
-              <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                Settlement Time
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">&lt;1s</div>
-              <div className="mt-2 text-xs text-emerald-500 font-medium">99.9% success rate</div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Features Section */}
       <section className="container mx-auto py-12 relative z-10">
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-          <Card className="group relative overflow-hidden border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-xl hover:border-primary/30">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <CardHeader className="relative">
-              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
-                <Lock className="h-6 w-6 text-primary" />
+        <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-3">
+          <div className="group flex items-center justify-between rounded-lg border border-muted-foreground/20 bg-card/50 backdrop-blur-sm px-4 py-3 transition-all hover:bg-card/90 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/10">
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Total Volume</span>
+              <div className="text-2xl font-bold bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600 bg-clip-text text-transparent">$2.4M</div>
+            </div>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-1 text-xs text-emerald-500 font-medium">
+                <span className="text-emerald-400">↑</span>
+                <span>+20.1%</span>
               </div>
-              <CardTitle className="text-xl font-semibold">Zero-Knowledge Privacy</CardTitle>
-            </CardHeader>
-            <CardContent className="relative">
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Trade details remain private through zk-proof verification. Prove
-                transaction validity without revealing sensitive information.
-              </p>
-            </CardContent>
-          </Card>
+              <span className="text-[10px] text-muted-foreground mt-0.5">this month</span>
+            </div>
+          </div>
 
-          <Card className="group relative overflow-hidden border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-xl hover:border-primary/30">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <CardHeader className="relative">
-              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
-                <Brain className="h-6 w-6 text-primary" />
+          <div className="group flex items-center justify-between rounded-lg border border-muted-foreground/20 bg-card/50 backdrop-blur-sm px-4 py-3 transition-all hover:bg-card/90 hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/10">
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Active Offers</span>
+              <div className="text-2xl font-bold bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent">1,248</div>
+            </div>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-1 text-xs text-blue-500 font-medium">
+                <span className="text-blue-400">↑</span>
+                <span>+12.5%</span>
               </div>
-              <CardTitle className="text-xl font-semibold">AI Risk Management</CardTitle>
-            </CardHeader>
-            <CardContent className="relative">
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Automated counterparty analysis and risk assessment. Real-time
-                monitoring ensures secure, compliant transactions.
-              </p>
-            </CardContent>
-          </Card>
+              <span className="text-[10px] text-muted-foreground mt-0.5">this week</span>
+            </div>
+          </div>
 
-          <Card className="group relative overflow-hidden border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-xl hover:border-primary/30">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <CardHeader className="relative">
-              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/10">
-                <Zap className="h-6 w-6 text-primary" />
+          <div className="group flex items-center justify-between rounded-lg border border-muted-foreground/20 bg-card/50 backdrop-blur-sm px-4 py-3 transition-all hover:bg-card/90 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/10">
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Settlement Time</span>
+              <div className="text-2xl font-bold bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 bg-clip-text text-transparent">&lt;1s</div>
+            </div>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-1 text-xs text-purple-500 font-medium">
+                <span className="text-purple-400">✓</span>
+                <span>99.9%</span>
               </div>
-              <CardTitle className="text-xl font-semibold">Instant Settlement</CardTitle>
-            </CardHeader>
-            <CardContent className="relative">
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Solana-powered escrow contracts execute in under a second. No
-                waiting periods, no intermediaries.
-              </p>
-            </CardContent>
-          </Card>
+              <span className="text-[10px] text-muted-foreground mt-0.5">success rate</span>
+            </div>
+          </div>
         </div>
       </section>
 
+  
       {/* Join the Degens Section */}
       <section className="container mx-auto py-20 relative z-10">
         <div className="mx-auto flex max-w-4xl flex-col items-center text-center mb-12">
@@ -336,7 +326,7 @@ export function DealforgeHomePage() {
             <CardContent className="p-8 flex flex-col items-center text-center space-y-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-full border-2">
                 <Zap className="h-8 w-8" />
-              </div>
+            </div>
               <CardTitle className="text-xl font-bold">Settle Instantly</CardTitle>
               <p className="text-sm text-muted-foreground">
                 SOL is released to the seller. Tokens are released to the buyer. Private, peer-to-peer. No middlemen.

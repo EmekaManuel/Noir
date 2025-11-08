@@ -16,7 +16,7 @@ export function NoirHeader() {
             <span className="text-sm font-bold text-primary-foreground">N</span>
           </div>
           <Link href="/" className="font-semibold text-xl tracking-tight hover:opacity-80 transition-opacity">
-            Noir OTC
+            Noir 
           </Link>
         </div>
         <nav className="hidden md:flex items-center gap-6">

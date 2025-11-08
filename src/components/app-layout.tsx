@@ -2,7 +2,6 @@
 
 import type React from "react";
 import { AccountChecker } from "@/components/account/account-ui";
-import { AppFooter } from "@/components/app-footer";
 import { ClusterChecker } from "@/components/cluster/cluster-ui";
 import { Toaster } from "./ui/sonner";
 
@@ -16,7 +15,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         </ClusterChecker>
         {children}
       </main>
-      <AppFooter />
       <Toaster />
     </div>
   );
