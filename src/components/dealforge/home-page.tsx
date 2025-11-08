@@ -100,9 +100,9 @@ export function DealforgeHomePage() {
       </section>
 
       {/* Metrics Section */}
-      <section className="container mx-auto py-12 relative z-10">
+      <section className="container mx-auto py-4 relative z-10">
         <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-3">
-          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:border-primary/20">
+          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
             <CardHeader className="space-y-0 pb-3">
               <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Total Volume
@@ -114,7 +114,7 @@ export function DealforgeHomePage() {
             </CardContent>
           </Card>
 
-          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:border-primary/20">
+          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
             <CardHeader className="space-y-0 pb-3">
               <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Active Offers
@@ -126,7 +126,7 @@ export function DealforgeHomePage() {
             </CardContent>
           </Card>
 
-          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg hover:border-primary/20">
+          <Card className="group border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-lg">
             <CardHeader className="space-y-0 pb-3">
               <CardTitle className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Settlement Time
@@ -141,7 +141,7 @@ export function DealforgeHomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto py-16 relative z-10">
+      <section className="container mx-auto py-12 relative z-10">
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           <Card className="group relative overflow-hidden border bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all hover:shadow-xl hover:border-primary/30">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
