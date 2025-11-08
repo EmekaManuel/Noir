@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
 import { useWalletUi } from "@wallet-ui/react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { OfferForm } from "@/components/dealforge/offer-form";
@@ -34,27 +34,23 @@ export default function CreateOfferPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-2xl py-8 px-4">
-      <Button
-        variant="ghost"
-        className="mb-6 -ml-2"
-        asChild
-      >
+    <div className="container mx-auto max-w-2xl px-4 py-8">
+      <Button asChild className="-ml-2 mb-6" variant="ghost">
         <Link href="/dashboard">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Link>
       </Button>
-      
+
       <div className="mb-8">
         <h1 className="mb-2 font-bold text-4xl text-foreground">
           Create OTC Deal
         </h1>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-lg text-muted-foreground">
           Set up a new over-the-counter trade
         </p>
       </div>
-      
+
       <OfferForm onSuccess={handleOfferCreated} />
     </div>
   );

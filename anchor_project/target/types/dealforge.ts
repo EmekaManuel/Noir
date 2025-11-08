@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/dealforge.json`.
  */
 export type Dealforge = {
-  "address": "CL6frD87dGURF5LdxGD7yTdGmcmeFH3cCjEbf3JMmpG2",
+  "address": "Xhjc4BZkWM8eTESN5t1Pfmyknerk7ecPJmUqfTf6UU1",
   "metadata": {
     "name": "dealforge",
     "version": "0.1.0",

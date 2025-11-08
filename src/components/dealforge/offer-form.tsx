@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { address } from "gill";
 import { DollarSign, Info, Link2 } from "lucide-react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -25,7 +26,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useMakeOfferMutation } from "./dealforge-data-access";
-import { useMemo } from "react";
 
 const offerFormSchema = z.object({
   offeredMint: z.string().min(1, "Token mint address is required"),
@@ -67,15 +67,20 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
     const amount = watchedValues.offeredAmount || 0;
     const requestedAmount = watchedValues.requestedAmount || 0;
     const requestedMint = watchedValues.requestedMint || "";
-    
+
     if (requestedMint) {
-      const shortMint = requestedMint.length > 8 
-        ? `${requestedMint.slice(0, 4)}...${requestedMint.slice(-4)}`
-        : requestedMint;
+      const shortMint =
+        requestedMint.length > 8
+          ? `${requestedMint.slice(0, 4)}...${requestedMint.slice(-4)}`
+          : requestedMint;
       return `List ${amount} tokens for ${requestedAmount} (${shortMint})`;
     }
     return `List ${amount} tokens for ${requestedAmount}`;
-  }, [watchedValues.offeredAmount, watchedValues.requestedAmount, watchedValues.requestedMint]);
+  }, [
+    watchedValues.offeredAmount,
+    watchedValues.requestedAmount,
+    watchedValues.requestedMint,
+  ]);
 
   const onSubmit = (data: OfferFormData) => {
     try {
@@ -117,7 +122,9 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Link2 className="h-5 w-5 text-muted-foreground" />
-              <CardTitle className="text-xl font-semibold">Deal Details</CardTitle>
+              <CardTitle className="font-semibold text-xl">
+                Deal Details
+              </CardTitle>
             </div>
             <CardDescription className="mt-2">
               Create a token swap offer for any Solana tokens.
@@ -130,7 +137,7 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
                 <h3 className="font-semibold text-sm">Token You're Selling</h3>
               </div>
-              
+
               <FormField
                 control={form.control}
                 name="offeredMint"
@@ -141,12 +148,13 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
                       <Input
                         placeholder="Enter token mint address (e.g., 8m38bz481d1du6KD7nhzMfejg31khNDJmTEz1GP7bfp)"
                         {...field}
-                        disabled={isLoading}
                         className="bg-muted/50"
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormDescription>
-                      Enter the mint address of any Solana token/memecoin you want to sell
+                      Enter the mint address of any Solana token/memecoin you
+                      want to sell
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -165,9 +173,9 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
                         step="0.000000001"
                         type="number"
                         {...field}
+                        className="bg-muted/50"
                         disabled={isLoading}
                         value={String(field.value || "")}
-                        className="bg-muted/50"
                       />
                     </FormControl>
                     <FormMessage />
@@ -183,7 +191,9 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Link2 className="h-5 w-5 text-muted-foreground" />
-              <CardTitle className="text-xl font-semibold">What You Want in Return</CardTitle>
+              <CardTitle className="font-semibold text-xl">
+                What You Want in Return
+              </CardTitle>
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -197,8 +207,8 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
                     <Input
                       placeholder="Enter token mint address (e.g., So11111111111111111111111111111111111111112 for SOL)"
                       {...field}
-                      disabled={isLoading}
                       className="bg-muted/50"
+                      disabled={isLoading}
                     />
                   </FormControl>
                   <FormDescription>
@@ -221,9 +231,9 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
                       step="0.000000001"
                       type="number"
                       {...field}
+                      className="bg-muted/50"
                       disabled={isLoading}
                       value={String(field.value || "")}
-                      className="bg-muted/50"
                     />
                   </FormControl>
                   <FormMessage />
@@ -233,29 +243,28 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
 
             {/* Preview */}
             <div className="rounded-md border bg-muted/30 p-3">
-              <p className="text-sm text-muted-foreground">
-                Preview: <span className="font-medium text-foreground">{previewText}</span>
+              <p className="text-muted-foreground text-sm">
+                Preview:{" "}
+                <span className="font-medium text-foreground">
+                  {previewText}
+                </span>
               </p>
             </div>
 
             {/* Platform Fee Info Box */}
-            <Alert className="bg-muted/50 border-muted">
+            <Alert className="border-muted bg-muted/50">
               <Info className="h-4 w-4" />
               <AlertTitle className="font-medium">Platform Fee</AlertTitle>
               <AlertDescription className="mt-1">
-                Platform fee is currently <span className="font-semibold">0%</span>. 
-                Fee structure will be implemented soon.
+                Platform fee is currently{" "}
+                <span className="font-semibold">0%</span>. Fee structure will be
+                implemented soon.
               </AlertDescription>
             </Alert>
           </CardContent>
         </Card>
 
-        <Button 
-          className="w-full" 
-          disabled={isLoading} 
-          type="submit"
-          size="lg"
-        >
+        <Button className="w-full" disabled={isLoading} size="lg" type="submit">
           {isLoading ? "Creating Offer..." : "Create Offer"}
         </Button>
       </form>

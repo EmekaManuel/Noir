@@ -172,7 +172,7 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
 
   return (
     <Card
-      className="cursor-pointer transition-colors hover:bg-muted/50 min-w-[320px]"
+      className="min-w-[320px] cursor-pointer transition-colors hover:bg-muted/50"
       onClick={onClick}
     >
       <CardContent className="p-6">
@@ -186,7 +186,7 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
                 ? "Your Offer"
                 : `Offer #${offer.account.data.id.toString()}`}
             </Badge>
-            <span className="text-muted-foreground text-xs hover:text-foreground transition-colors">
+            <span className="text-muted-foreground text-xs transition-colors hover:text-foreground">
               View Details
             </span>
           </div>
@@ -197,7 +197,7 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
                 <div className="font-semibold text-lg">
                   {formatAmount(offer.account.data.offeredAmount)}
                 </div>
-                <div className="text-muted-foreground text-xs mt-1.5">
+                <div className="mt-1.5 text-muted-foreground text-xs">
                   {ellipsify(offer.account.data.offeredMint.toString(), 8)}
                 </div>
               </div>
@@ -210,7 +210,7 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
                 <div className="font-semibold text-lg">
                   {formatAmount(offer.account.data.requestedAmount)}
                 </div>
-                <div className="text-muted-foreground text-xs mt-1.5">
+                <div className="mt-1.5 text-muted-foreground text-xs">
                   {ellipsify(offer.account.data.requestedMint.toString(), 8)}
                 </div>
               </div>

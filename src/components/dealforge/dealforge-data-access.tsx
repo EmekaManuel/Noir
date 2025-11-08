@@ -280,6 +280,7 @@ export function useMakeOfferMutation() {
           Math.floor(requestedAmount * 10 ** requestedMintAccount.data.decimals)
         ),
         maker: txSigner,
+        tokenProgram: TOKEN_2022_PROGRAM_ADDRESS,
       });
 
       return await signAndSend(instruction, txSigner);
@@ -295,6 +296,7 @@ export function useMakeOfferMutation() {
     onError: (error) => {
       const message =
         error instanceof Error ? error.message : "Failed to create offer";
+
       toast.error(message);
     },
   });
@@ -390,6 +392,7 @@ export function useRefundOfferMutation() {
         maker: txSigner,
         offeredMint,
         offer,
+        tokenProgram: TOKEN_2022_PROGRAM_ADDRESS,
       });
 
       return await signAndSend(instruction, txSigner);
