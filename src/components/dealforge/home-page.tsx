@@ -22,6 +22,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { FlickeringGrid } from "../ui/shadcn-io/flickering-grid";
 
 export function DealforgeHomePage() {
   const { account } = useWalletUi();
@@ -33,6 +34,17 @@ export function DealforgeHomePage() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]" />
       
       <NoirHeader />
+
+      <section className="relative main-section">
+      <FlickeringGrid
+        className="absolute inset-0"
+        squareSize={4}
+        gridGap={6}
+        flickerChance={1.0}
+        color="rgb(70, 70, 70)"
+        maxOpacity={0.1}
+      />
+
 
       {/* Hero Section */}
       <section className="container mx-auto relative py-20 lg:py-28">
@@ -180,6 +192,8 @@ export function DealforgeHomePage() {
             </div>
           </div>
         </div>
+      </section>
+
       </section>
 
   
