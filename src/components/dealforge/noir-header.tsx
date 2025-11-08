@@ -15,11 +15,8 @@ export function NoirHeader() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60">
             <span className="font-bold text-primary-foreground text-sm">N</span>
           </div>
-          <Link
-            className="font-semibold text-xl tracking-tight transition-opacity hover:opacity-80"
-            href="/"
-          >
-            Noir OTC
+          <Link href="/" className="font-semibold text-xl tracking-tight hover:opacity-80 transition-opacity">
+            Noir 
           </Link>
         </div>
         <nav className="hidden items-center gap-6 md:flex">
