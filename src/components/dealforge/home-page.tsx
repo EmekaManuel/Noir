@@ -45,7 +45,7 @@ export function DealforgeHomePage() {
             transition={{ duration: 0.6 }}
             className="mb-6 font-bold text-5xl tracking-tight sm:text-6xl md:text-7xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent"
           >
-            Private OTC Trading
+            Private Meme OTC Trading
           </motion.h1>
 
           <motion.p

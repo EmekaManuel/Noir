@@ -172,11 +172,11 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
 
   return (
     <Card
-      className="cursor-pointer transition-colors hover:bg-muted/50"
+      className="cursor-pointer transition-colors hover:bg-muted/50 min-w-[320px]"
       onClick={onClick}
     >
-      <CardContent className="p-4">
-        <div className="space-y-3">
+      <CardContent className="p-6">
+        <div className="space-y-5">
           <div className="flex items-center justify-between">
             <Badge
               className="text-xs"
@@ -186,35 +186,39 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
                 ? "Your Offer"
                 : `Offer #${offer.account.data.id.toString()}`}
             </Badge>
-            <Button className="h-8 text-xs" size="sm" variant="ghost">
+            <span className="text-muted-foreground text-xs hover:text-foreground transition-colors">
               View Details
-            </Button>
+            </span>
           </div>
 
-          <div className="space-y-2">
-            <div className="text-center">
+          <div className="space-y-4">
+            <div>
               <div className="text-green-600">
                 <div className="font-semibold text-lg">
                   {formatAmount(offer.account.data.offeredAmount)}
                 </div>
-                <div className="text-muted-foreground text-xs">
+                <div className="text-muted-foreground text-xs mt-1.5">
                   {ellipsify(offer.account.data.offeredMint.toString(), 8)}
                 </div>
               </div>
 
-              <div className="my-1 text-muted-foreground text-sm">↓</div>
+              <div className="my-4 flex justify-center">
+                <div className="text-muted-foreground text-sm">↓</div>
+              </div>
 
               <div className="text-blue-600">
                 <div className="font-semibold text-lg">
                   {formatAmount(offer.account.data.requestedAmount)}
                 </div>
-                <div className="text-muted-foreground text-xs">
+                <div className="text-muted-foreground text-xs mt-1.5">
                   {ellipsify(offer.account.data.requestedMint.toString(), 8)}
                 </div>
               </div>
             </div>
 
-            <div className="border-t pt-2 text-center text-muted-foreground text-xs">
+            <Separator className="my-4" />
+
+            <div className="text-muted-foreground text-xs">
               Maker: {ellipsify(offer.account.data.maker.toString(), 8)}
             </div>
           </div>
@@ -333,7 +337,7 @@ export function OfferListing({ filterByMaker }: OfferListingProps = {}) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {allOffers.map((offer) => (
           <OfferCard
             key={offer.pubkey.toString()}
