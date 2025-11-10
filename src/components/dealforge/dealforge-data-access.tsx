@@ -198,12 +198,34 @@ export async function fetchOffersPage(
   }
 
   // Decode with Gill SDK - fetchAllOffer should handle parallel fetching
-  const decoded = await fetchAllOffer(rpc, pageAddresses);
-
-  return decoded.map((offer, i) => ({
-    pubkey: pageAddresses[i],
-    account: offer,
-  }));
+  try {
+    const decoded = await fetchAllOffer(rpc, pageAddresses);
+    return decoded.map((offer, i) => ({
+      pubkey: pageAddresses[i],
+      account: offer,
+    }));
+  } catch (error) {
+    // If fetchAllOffer fails (e.g., old offer format), try fetching individually
+    console.warn('Batch fetch failed, fetching offers individually...', error);
+    
+    const offers = await Promise.allSettled(
+      pageAddresses.map((addr) => fetchOffer(rpc, addr))
+    );
+    
+    return offers
+      .map((result, i) => {
+        if (result.status === 'fulfilled') {
+          return {
+            pubkey: pageAddresses[i],
+            account: result.value,
+          };
+        } else {
+          console.warn(`Skipping incompatible offer at ${pageAddresses[i]}`);
+          return null;
+        }
+      })
+      .filter((offer): offer is NonNullable<typeof offer> => offer !== null);
+  }
 }
 
 export function useOffersPaginated(addresses: Address[]) {
@@ -256,12 +278,14 @@ export function useMakeOfferMutation() {
       requestedMint,
       offeredAmount,
       requestedAmount,
+      allowPartial,
     }: {
       offerId: bigint;
       offeredMint: Address;
       requestedMint: Address;
       offeredAmount: number;
       requestedAmount: number;
+      allowPartial: boolean;
     }) => {
       if (!txSigner.address) {
         throw new Error("Wallet not connected");
@@ -289,6 +313,7 @@ export function useMakeOfferMutation() {
         requestedAmount: BigInt(
           Math.floor(requestedAmount * 10 ** requestedMintAccount.data.decimals)
         ),
+        allowPartial,
         maker: txSigner,
         tokenProgram: TOKEN_2022_PROGRAM_ADDRESS,
       });
@@ -304,10 +329,32 @@ export function useMakeOfferMutation() {
       });
     },
     onError: (error) => {
-      const message =
-        error instanceof Error ? error.message : "Failed to create offer";
-
-      toast.error(message);
+      let message = "Failed to create offer";
+      
+      if (error instanceof Error) {
+        const errorStr = error.message;
+        
+        // Parse specific error codes for user-friendly messages
+        if (errorStr.includes("0x1770") || errorStr.includes("InsufficientBalance")) {
+          message = "Insufficient token balance. You don't have enough tokens to create this offer.";
+        } else if (errorStr.includes("0x1778") || errorStr.includes("InvalidOfferedMintAmount")) {
+          message = "Invalid offered amount. Amount must be greater than zero.";
+        } else if (errorStr.includes("0x1779") || errorStr.includes("InvalidRequestedMintAmount")) {
+          message = "Invalid requested amount. Amount must be greater than zero.";
+        } else if (errorStr.includes("Invalid offered Mint")) {
+          message = "Invalid token address. Please check the offered token mint address.";
+        } else if (errorStr.includes("Invalid requested Mint")) {
+          message = "Invalid token address. Please check the requested token mint address.";
+        } else if (errorStr.includes("User rejected")) {
+          message = "Transaction cancelled";
+        } else {
+          message = errorStr;
+        }
+      }
+      
+      toast.error(message, {
+        duration: 5000,
+      });
     },
   });
 }
@@ -323,18 +370,14 @@ export function useTakeOfferMutation() {
       offer,
       offeredMint,
       requestedMint,
+      takeAmount,
     }: {
       offer: Account<Offer, string>;
       offeredMint: Address;
       requestedMint: Address;
+      takeAmount?: bigint; // Optional: defaults to full amount
     }) => {
       if (!txSigner) throw new Error("Wallet not connected");
-
-      // const [offerPda] = await getOfferPDA({
-      //   cluster,
-      //   maker: offer.data.maker,
-      //   offerId: offer.data.id,
-      // });
 
       const takerOfferedAta = await getAssociatedTokenAccountAddress(
         offeredMint,
@@ -347,6 +390,9 @@ export function useTakeOfferMutation() {
         TOKEN_2022_PROGRAM_ADDRESS
       );
 
+      // Use specified takeAmount or full offer amount if not specified
+      const amountToTake = takeAmount ?? offer.data.offeredAmount;
+
       const instruction = await getTakeOfferInstructionAsync({
         maker: offer.data.maker,
         taker: txSigner,
@@ -355,6 +401,7 @@ export function useTakeOfferMutation() {
         takerOfferedAta,
         takerRequestedAta,
         offer: offer.address,
+        takeAmount: amountToTake,
         tokenProgram: TOKEN_2022_PROGRAM_ADDRESS,
       });
 
@@ -368,9 +415,30 @@ export function useTakeOfferMutation() {
       });
     },
     onError: (error) => {
-      const message =
-        error instanceof Error ? error.message : "Failed to take offer";
-      toast.error(message);
+      let message = "Failed to take offer";
+      
+      if (error instanceof Error) {
+        const errorStr = error.message;
+        
+        // Parse specific error codes for user-friendly messages
+        if (errorStr.includes("0x1770") || errorStr.includes("InsufficientBalance")) {
+          message = "Insufficient token balance. You don't have enough tokens to complete this trade. Try reducing the amount using the slider.";
+        } else if (errorStr.includes("0x177b") || errorStr.includes("PartialFillsNotAllowed")) {
+          message = "This offer requires taking the full amount. Partial fills are not allowed.";
+        } else if (errorStr.includes("0x177c") || errorStr.includes("InvalidTakeAmount")) {
+          message = "Invalid amount. Please enter a valid amount greater than zero.";
+        } else if (errorStr.includes("0x177d") || errorStr.includes("ExceedsOfferAmount")) {
+          message = "Amount exceeds available offer. Please reduce the amount.";
+        } else if (errorStr.includes("User rejected")) {
+          message = "Transaction cancelled by user";
+        } else {
+          message = errorStr;
+        }
+      }
+      
+      toast.error(message, {
+        duration: 5000,
+      });
     },
   });
 }
@@ -415,9 +483,24 @@ export function useRefundOfferMutation() {
       });
     },
     onError: (error) => {
-      const message =
-        error instanceof Error ? error.message : "Failed to refund offer";
-      toast.error(message);
+      let message = "Failed to refund offer";
+      
+      if (error instanceof Error) {
+        const errorStr = error.message;
+        
+        // Parse specific error codes for user-friendly messages
+        if (errorStr.includes("User rejected")) {
+          message = "Transaction cancelled";
+        } else if (errorStr.includes("not found") || errorStr.includes("does not exist")) {
+          message = "Offer not found or already closed";
+        } else {
+          message = errorStr;
+        }
+      }
+      
+      toast.error(message, {
+        duration: 5000,
+      });
     },
   });
 }

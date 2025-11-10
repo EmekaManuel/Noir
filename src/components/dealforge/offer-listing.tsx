@@ -7,14 +7,18 @@ import {
   ArrowDown,
   ArrowRight,
   ExternalLink,
+  Info,
   Loader2,
   RefreshCw,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { ExplorerLink } from "@/components/cluster/cluster-ui";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import {
   Dialog,
   DialogContent,
@@ -44,17 +48,31 @@ function OfferDetails({ offer, open, onOpenChange }: OfferDetailsProps) {
 
   const isOwner = account?.address === offer.account.data.maker;
   const offerId = offer.account.data.id;
+  const allowPartial = offer.account.data.allowPartial;
+  
+  // State for partial fill amount (percentage, 0-100)
+  const [fillPercentage, setFillPercentage] = useState(100);
 
   const formatAmount = (amount: bigint) => {
     const DECIMALS = 1_000_000_000n;
     return (Number(amount) / Number(DECIMALS)).toFixed(9);
   };
 
+  // Calculate amounts based on percentage
+  const takeAmount = useMemo(() => {
+    return (offer.account.data.offeredAmount * BigInt(fillPercentage)) / 100n;
+  }, [offer.account.data.offeredAmount, fillPercentage]);
+
+  const requestedForTake = useMemo(() => {
+    return (offer.account.data.requestedAmount * BigInt(fillPercentage)) / 100n;
+  }, [offer.account.data.requestedAmount, fillPercentage]);
+
   const handleTakeOffer = async () => {
     await takeOfferMutation.mutateAsync({
       offer: offer.account,
       offeredMint: offer.account.data.offeredMint,
       requestedMint: offer.account.data.requestedMint,
+      takeAmount: allowPartial ? takeAmount : undefined, // Only pass if partial allowed
     });
     onOpenChange(false);
   };
@@ -176,6 +194,51 @@ function OfferDetails({ offer, open, onOpenChange }: OfferDetailsProps) {
 
           <Separator />
 
+          {/* Partial Fill Controls (for takers only) */}
+          {!isOwner && (
+            <>
+              {allowPartial ? (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-base font-semibold">
+                      Amount to Take ({fillPercentage}%)
+                    </Label>
+                    <Slider
+                      value={[fillPercentage]}
+                      onValueChange={([value]) => setFillPercentage(value)}
+                      min={1}
+                      max={100}
+                      step={1}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">You'll receive:</span>
+                      <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                        {formatAmount(takeAmount)} tokens
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">You'll pay:</span>
+                      <span className="font-semibold text-blue-600 dark:text-blue-400">
+                        {formatAmount(requestedForTake)} tokens
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Alert className="bg-amber-500/10 border-amber-500/20">
+                  <Info className="h-4 w-4 text-amber-600" />
+                  <AlertDescription className="text-amber-900 dark:text-amber-100">
+                    This is an all-or-nothing offer. You must take the full amount.
+                  </AlertDescription>
+                </Alert>
+              )}
+              <Separator />
+            </>
+          )}
+
           {/* Actions */}
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
             {isOwner ? (
@@ -239,12 +302,22 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
       <CardContent className="p-4 sm:p-5">
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Badge
-              className="rounded-full font-medium text-xs"
-              variant={isOwner ? "secondary" : "outline"}
-            >
-              {isOwner ? "Your Offer" : `#${offer.account.data.id.toString()}`}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge
+                className="rounded-full font-medium text-xs"
+                variant={isOwner ? "secondary" : "outline"}
+              >
+                {isOwner ? "Your Offer" : `#${offer.account.data.id.toString()}`}
+              </Badge>
+              {offer.account.data.allowPartial && (
+                <Badge
+                  className="rounded-full font-medium text-xs"
+                  variant="default"
+                >
+                  Partial OK
+                </Badge>
+              )}
+            </div>
             <div className="flex items-center gap-1 text-muted-foreground text-xs transition-colors group-hover:text-foreground">
               <span>View</span>
               <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />

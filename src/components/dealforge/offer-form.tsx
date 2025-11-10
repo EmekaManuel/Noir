@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { useMakeOfferMutation } from "./dealforge-data-access";
 
 const offerFormSchema = z.object({
@@ -40,6 +41,7 @@ const offerFormSchema = z.object({
       error: "Amount is required",
     })
     .gt(0, "Amount should be greater than 0"),
+  allowPartial: z.boolean().default(true),
 });
 type OfferFormData = z.infer<typeof offerFormSchema>;
 type OfferFormDataInput = z.input<typeof offerFormSchema>;
@@ -59,6 +61,7 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
       offeredAmount: 0,
       requestedMint: "",
       requestedAmount: 0,
+      allowPartial: true,
     },
   });
 
@@ -93,6 +96,7 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
 
       const offeredAmount = data.offeredAmount;
       const requestedAmount = data.requestedAmount;
+      const allowPartial = data.allowPartial;
 
       makeOfferMutation(
         {
@@ -101,6 +105,7 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
           requestedMint,
           offeredAmount,
           requestedAmount,
+          allowPartial,
         },
         {
           onSuccess: () => {
@@ -261,6 +266,35 @@ export function OfferForm({ onSuccess }: OfferFormProps) {
                 implemented soon.
               </AlertDescription>
             </Alert>
+          </CardContent>
+        </Card>
+
+        {/* Allow Partial Fills Option */}
+        <Card className="border bg-card shadow-sm">
+          <CardContent className="pt-6">
+            <FormField
+              control={form.control}
+              name="allowPartial"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base font-semibold">
+                      Allow Partial Fills
+                    </FormLabel>
+                    <FormDescription>
+                      Let buyers take any portion of your offer. If disabled, buyers must take the full amount.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isLoading}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
