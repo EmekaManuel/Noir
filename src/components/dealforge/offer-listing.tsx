@@ -34,6 +34,7 @@ import {
   useRefundOfferMutation,
   useTakeOfferMutation,
 } from "./dealforge-data-access";
+import { TokenDisplay } from "./token-display";
 
 interface OfferDetailsProps {
   readonly offer: { pubkey: Address; account: Account<Offer> };
@@ -128,15 +129,11 @@ function OfferDetails({ offer, open, onOpenChange }: OfferDetailsProps) {
                   </span>
                 </div>
                 <div className="rounded-full bg-muted px-3 py-1.5">
-                  <ExplorerLink
-                    address={offer.account.data.offeredMint.toString()}
+                  <TokenDisplay
+                    address={offer.account.data.offeredMint}
                     className="font-mono text-muted-foreground text-xs"
-                    label={ellipsify(
-                      offer.account.data.offeredMint.toString(),
-                      8
-                    )}
+                    showExternalLink
                   />
-                  <ExternalLink className="ml-1.5 inline h-3 w-3" />
                 </div>
               </div>
             </div>
@@ -159,15 +156,11 @@ function OfferDetails({ offer, open, onOpenChange }: OfferDetailsProps) {
                   </span>
                 </div>
                 <div className="rounded-full bg-muted px-3 py-1.5">
-                  <ExplorerLink
-                    address={offer.account.data.requestedMint.toString()}
+                  <TokenDisplay
+                    address={offer.account.data.requestedMint}
                     className="font-mono text-muted-foreground text-xs"
-                    label={ellipsify(
-                      offer.account.data.requestedMint.toString(),
-                      8
-                    )}
+                    showExternalLink
                   />
-                  <ExternalLink className="ml-1.5 inline h-3 w-3" />
                 </div>
               </div>
             </div>
@@ -338,9 +331,10 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
                   </span>
                 </div>
                 <div className="rounded-full bg-muted px-2.5 py-1">
-                  <span className="font-mono text-muted-foreground text-xs">
-                    {ellipsify(offer.account.data.offeredMint.toString(), 6)}
-                  </span>
+                  <TokenDisplay
+                    address={offer.account.data.offeredMint}
+                    className="font-mono text-muted-foreground text-xs"
+                  />
                 </div>
               </div>
             </div>
@@ -363,9 +357,10 @@ function OfferCard({ offer, onClick }: OfferCardProps) {
                   </span>
                 </div>
                 <div className="rounded-full bg-muted px-2.5 py-1">
-                  <span className="font-mono text-muted-foreground text-xs">
-                    {ellipsify(offer.account.data.requestedMint.toString(), 6)}
-                  </span>
+                  <TokenDisplay
+                    address={offer.account.data.requestedMint}
+                    className="font-mono text-muted-foreground text-xs"
+                  />
                 </div>
               </div>
             </div>
