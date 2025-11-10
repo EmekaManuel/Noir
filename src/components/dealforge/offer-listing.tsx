@@ -514,7 +514,7 @@ export function OfferListing({ filterByMaker }: OfferListingProps = {}) {
         ))}
       </div>
 
-      {hasNextPage && (
+      {hasNextPage && allOffers.length > 0 && allOffers.length < accountsAddress.length && (
         <div className="flex justify-center pt-4">
           <Button
             className="min-w-[160px]"
