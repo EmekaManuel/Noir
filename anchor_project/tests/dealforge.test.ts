@@ -6,6 +6,9 @@ import {
   DEALFORGE_ERROR__INSUFFICIENT_BALANCE,
   DEALFORGE_ERROR__INVALID_OFFERED_MINT_AMOUNT,
   DEALFORGE_ERROR__INVALID_REQUESTED_MINT_AMOUNT,
+  DEALFORGE_ERROR__PARTIAL_FILLS_NOT_ALLOWED,
+  DEALFORGE_ERROR__INVALID_TAKE_AMOUNT,
+  DEALFORGE_ERROR__EXCEEDS_OFFER_AMOUNT,
   fetchOffer,
   getRefundOfferInstructionAsync,
   getTakeOfferInstructionAsync,
@@ -187,6 +190,7 @@ describe("dealforge", () => {
         takerRequestedAta: data.takerRequestedTokenAccount,
         offer,
         vault,
+        takeAmount: tokenAOfferedAmount, // ← Take full amount
         tokenProgram,
       });
 
@@ -248,6 +252,7 @@ describe("dealforge", () => {
         takerRequestedAta: data.takerRequestedTokenAccount,
         offer,
         vault,
+        takeAmount: tokenAOfferedAmount, // ← Take full amount
         tokenProgram,
       });
 
@@ -370,6 +375,266 @@ describe("dealforge", () => {
           skipPreflight: true,
         })
       ).rejects.toThrowError(`${CUSTOM_FUNDS_ERROR_MESSAGE}2015`);
+    });
+  });
+
+  describe("partialFills", () => {
+    it("should allow partial fill when allowPartial is true", async () => {
+      const offeredAmount = 10n * ONE_MINT_TOKEN;
+      const requestedAmount = 5n * ONE_MINT_TOKEN;
+
+      const { vault, offer } = await createTestOffer({
+        maker: data.maker,
+        offeredMint: data.offeredMint,
+        requestedMint: data.requestedMint,
+        makerTokenAccount: data.makerOfferedTokenAccount,
+        tokenOfferedAmount: offeredAmount,
+        tokenRequestedAmount: requestedAmount,
+        allowPartial: true, // ← Enable partial fills
+      });
+
+      // Bob wants to take only 50% (5 Token A)
+      const partialTakeAmount = 5n * ONE_MINT_TOKEN;
+      const expectedRequestedAmount = 2n * ONE_MINT_TOKEN + 500_000_000n; // 2.5 Token B
+
+      // Get balances BEFORE the partial fill
+      const [bobTokenABefore, bobTokenBBefore] = await Promise.all([
+        getTokenAccountBalance(bobTokenAccountA),
+        getTokenAccountBalance(bobTokenAccountB),
+      ]);
+
+      const takeOfferInstruction = await getTakeOfferInstructionAsync({
+        maker: data.maker.address,
+        taker: data.taker,
+        offeredMint: data.offeredMint.address,
+        requestedMint: data.requestedMint.address,
+        makerRequestedAta: data.makerRequestedTokenAccount,
+        takerOfferedAta: data.takerOfferedTokenAccount,
+        takerRequestedAta: data.takerRequestedTokenAccount,
+        offer,
+        vault,
+        takeAmount: partialTakeAmount, // ← Take only 5 out of 10
+        tokenProgram,
+      });
+
+      await createAndConfirmTransaction({
+        ix: [takeOfferInstruction],
+        payer: data.taker,
+      });
+
+      // Verify balances after partial fill
+      const [bobTokenAAfter, bobTokenBAfter, vaultBalanceAfter] =
+        await Promise.all([
+          getTokenAccountBalance(bobTokenAccountA),
+          getTokenAccountBalance(bobTokenAccountB),
+          getTokenAccountBalance(vault),
+        ]);
+
+      // Bob received 5 Token A (relative to before)
+      expect(BigInt(bobTokenAAfter.amount)).toEqual(
+        BigInt(bobTokenABefore.amount) + partialTakeAmount
+      );
+
+      // Bob paid ~2.5 Token B (relative to before)
+      expect(BigInt(bobTokenBAfter.amount)).toEqual(
+        BigInt(bobTokenBBefore.amount) - expectedRequestedAmount
+      );
+
+      // Vault still has 5 Token A remaining
+      expect(BigInt(vaultBalanceAfter.amount)).toEqual(
+        offeredAmount - partialTakeAmount
+      );
+
+      // Offer account should still exist (not fully filled)
+      const offerAfter = await fetchOffer(rpc, offer);
+      expect(offerAfter.data.offeredAmount).toEqual(
+        offeredAmount - partialTakeAmount
+      );
+      expect(offerAfter.data.requestedAmount).toEqual(
+        requestedAmount - expectedRequestedAmount
+      );
+    });
+
+    it("should close offer when fully filled through partial fills", async () => {
+      const offeredAmount = 10n * ONE_MINT_TOKEN;
+      const requestedAmount = 5n * ONE_MINT_TOKEN;
+
+      const { vault, offer } = await createTestOffer({
+        maker: data.maker,
+        offeredMint: data.offeredMint,
+        requestedMint: data.requestedMint,
+        makerTokenAccount: data.makerOfferedTokenAccount,
+        tokenOfferedAmount: offeredAmount,
+        tokenRequestedAmount: requestedAmount,
+        allowPartial: true,
+      });
+
+      // First fill: 30%
+      const firstTake = 3n * ONE_MINT_TOKEN;
+      await createAndConfirmTransaction({
+        ix: [
+          await getTakeOfferInstructionAsync({
+            maker: data.maker.address,
+            taker: data.taker,
+            offeredMint: data.offeredMint.address,
+            requestedMint: data.requestedMint.address,
+            makerRequestedAta: data.makerRequestedTokenAccount,
+            takerOfferedAta: data.takerOfferedTokenAccount,
+            takerRequestedAta: data.takerRequestedTokenAccount,
+            offer,
+            vault,
+            takeAmount: firstTake,
+            tokenProgram,
+          }),
+        ],
+        payer: data.taker,
+      });
+
+      // Second fill: 70% (should close offer)
+      const secondTake = 7n * ONE_MINT_TOKEN;
+      await createAndConfirmTransaction({
+        ix: [
+          await getTakeOfferInstructionAsync({
+            maker: data.maker.address,
+            taker: data.taker,
+            offeredMint: data.offeredMint.address,
+            requestedMint: data.requestedMint.address,
+            makerRequestedAta: data.makerRequestedTokenAccount,
+            takerOfferedAta: data.takerOfferedTokenAccount,
+            takerRequestedAta: data.takerRequestedTokenAccount,
+            offer,
+            vault,
+            takeAmount: secondTake,
+            tokenProgram,
+          }),
+        ],
+        payer: data.taker,
+      });
+
+      // Offer should be closed
+      await expect(fetchOffer(rpc, offer)).rejects.toThrow(
+        `Account not found at address: ${offer}`
+      );
+    });
+
+    it("should reject partial fill when allowPartial is false", async () => {
+      const offeredAmount = 10n * ONE_MINT_TOKEN;
+      const requestedAmount = 5n * ONE_MINT_TOKEN;
+
+      const { vault, offer } = await createTestOffer({
+        maker: data.maker,
+        offeredMint: data.offeredMint,
+        requestedMint: data.requestedMint,
+        makerTokenAccount: data.makerOfferedTokenAccount,
+        tokenOfferedAmount: offeredAmount,
+        tokenRequestedAmount: requestedAmount,
+        allowPartial: false, // ← Disable partial fills
+      });
+
+      // Try to take only 50% - should fail
+      const partialTakeAmount = 5n * ONE_MINT_TOKEN;
+
+      const takeOfferInstruction = await getTakeOfferInstructionAsync({
+        maker: data.maker.address,
+        taker: data.taker,
+        offeredMint: data.offeredMint.address,
+        requestedMint: data.requestedMint.address,
+        makerRequestedAta: data.makerRequestedTokenAccount,
+        takerOfferedAta: data.takerOfferedTokenAccount,
+        takerRequestedAta: data.takerRequestedTokenAccount,
+        offer,
+        vault,
+        takeAmount: partialTakeAmount,
+        tokenProgram,
+      });
+
+      await expect(
+        createAndConfirmTransaction({
+          ix: [takeOfferInstruction],
+          payer: data.taker,
+          skipPreflight: true,
+        })
+      ).rejects.toThrow(
+        `${CUSTOM_FUNDS_ERROR_MESSAGE}${DEALFORGE_ERROR__PARTIAL_FILLS_NOT_ALLOWED}`
+      );
+    });
+
+    it("should reject taking more than available", async () => {
+      const offeredAmount = 10n * ONE_MINT_TOKEN;
+      const requestedAmount = 5n * ONE_MINT_TOKEN;
+
+      const { vault, offer } = await createTestOffer({
+        maker: data.maker,
+        offeredMint: data.offeredMint,
+        requestedMint: data.requestedMint,
+        makerTokenAccount: data.makerOfferedTokenAccount,
+        tokenOfferedAmount: offeredAmount,
+        tokenRequestedAmount: requestedAmount,
+        allowPartial: true,
+      });
+
+      // Try to take more than offered - should fail
+      const excessiveTakeAmount = 15n * ONE_MINT_TOKEN;
+
+      const takeOfferInstruction = await getTakeOfferInstructionAsync({
+        maker: data.maker.address,
+        taker: data.taker,
+        offeredMint: data.offeredMint.address,
+        requestedMint: data.requestedMint.address,
+        makerRequestedAta: data.makerRequestedTokenAccount,
+        takerOfferedAta: data.takerOfferedTokenAccount,
+        takerRequestedAta: data.takerRequestedTokenAccount,
+        offer,
+        vault,
+        takeAmount: excessiveTakeAmount,
+        tokenProgram,
+      });
+
+      await expect(
+        createAndConfirmTransaction({
+          ix: [takeOfferInstruction],
+          payer: data.taker,
+          skipPreflight: true,
+        })
+      ).rejects.toThrow(
+        `${CUSTOM_FUNDS_ERROR_MESSAGE}${DEALFORGE_ERROR__EXCEEDS_OFFER_AMOUNT}`
+      );
+    });
+
+    it("should reject zero take amount", async () => {
+      const { vault, offer } = await createTestOffer({
+        maker: data.maker,
+        offeredMint: data.offeredMint,
+        requestedMint: data.requestedMint,
+        makerTokenAccount: data.makerOfferedTokenAccount,
+        tokenOfferedAmount: 10n * ONE_MINT_TOKEN,
+        tokenRequestedAmount: 5n * ONE_MINT_TOKEN,
+        allowPartial: true,
+      });
+
+      const takeOfferInstruction = await getTakeOfferInstructionAsync({
+        maker: data.maker.address,
+        taker: data.taker,
+        offeredMint: data.offeredMint.address,
+        requestedMint: data.requestedMint.address,
+        makerRequestedAta: data.makerRequestedTokenAccount,
+        takerOfferedAta: data.takerOfferedTokenAccount,
+        takerRequestedAta: data.takerRequestedTokenAccount,
+        offer,
+        vault,
+        takeAmount: 0n, // ← Invalid: zero amount
+        tokenProgram,
+      });
+
+      await expect(
+        createAndConfirmTransaction({
+          ix: [takeOfferInstruction],
+          payer: data.taker,
+          skipPreflight: true,
+        })
+      ).rejects.toThrow(
+        `${CUSTOM_FUNDS_ERROR_MESSAGE}${DEALFORGE_ERROR__INVALID_TAKE_AMOUNT}`
+      );
     });
   });
 });

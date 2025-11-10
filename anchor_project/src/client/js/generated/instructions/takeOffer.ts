@@ -16,6 +16,8 @@ import {
   getProgramDerivedAddress,
   getStructDecoder,
   getStructEncoder,
+  getU64Decoder,
+  getU64Encoder,
   transformEncoder,
   type AccountMeta,
   type AccountSignerMeta,
@@ -113,13 +115,19 @@ export type TakeOfferInstruction<
     ]
   >;
 
-export type TakeOfferInstructionData = { discriminator: ReadonlyUint8Array };
+export type TakeOfferInstructionData = {
+  discriminator: ReadonlyUint8Array;
+  takeAmount: bigint;
+};
 
-export type TakeOfferInstructionDataArgs = {};
+export type TakeOfferInstructionDataArgs = { takeAmount: number | bigint };
 
 export function getTakeOfferInstructionDataEncoder(): FixedSizeEncoder<TakeOfferInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
+    getStructEncoder([
+      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
+      ['takeAmount', getU64Encoder()],
+    ]),
     (value) => ({ ...value, discriminator: TAKE_OFFER_DISCRIMINATOR })
   );
 }
@@ -127,6 +135,7 @@ export function getTakeOfferInstructionDataEncoder(): FixedSizeEncoder<TakeOffer
 export function getTakeOfferInstructionDataDecoder(): FixedSizeDecoder<TakeOfferInstructionData> {
   return getStructDecoder([
     ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ['takeAmount', getU64Decoder()],
   ]);
 }
 
@@ -160,7 +169,7 @@ export type TakeOfferAsyncInput<
   requestedMint: Address<TAccountRequestedMint>;
   /** Taker’s token account for offered_mint (they’ll receive maker’s tokens) */
   takerOfferedAta?: Address<TAccountTakerOfferedAta>;
-  /** Taker’s token account holding requested_mint */
+  /** Taker's token account holding requested_mint */
   takerRequestedAta?: Address<TAccountTakerRequestedAta>;
   /** maker’s token account for requested_mint (where taker sends payment) */
   makerRequestedAta?: Address<TAccountMakerRequestedAta>;
@@ -169,6 +178,7 @@ export type TakeOfferAsyncInput<
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
   tokenProgram?: Address<TAccountTokenProgram>;
   systemProgram?: Address<TAccountSystemProgram>;
+  takeAmount: TakeOfferInstructionDataArgs['takeAmount'];
 };
 
 export async function getTakeOfferInstructionAsync<
@@ -250,6 +260,9 @@ export async function getTakeOfferInstructionAsync<
     ResolvedAccount
   >;
 
+  // Original args.
+  const args = { ...input };
+
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
@@ -324,7 +337,9 @@ export async function getTakeOfferInstructionAsync<
       getAccountMeta(accounts.tokenProgram),
       getAccountMeta(accounts.systemProgram),
     ],
-    data: getTakeOfferInstructionDataEncoder().encode({}),
+    data: getTakeOfferInstructionDataEncoder().encode(
+      args as TakeOfferInstructionDataArgs
+    ),
     programAddress,
   } as TakeOfferInstruction<
     TProgramAddress,
@@ -363,7 +378,7 @@ export type TakeOfferInput<
   requestedMint: Address<TAccountRequestedMint>;
   /** Taker’s token account for offered_mint (they’ll receive maker’s tokens) */
   takerOfferedAta: Address<TAccountTakerOfferedAta>;
-  /** Taker’s token account holding requested_mint */
+  /** Taker's token account holding requested_mint */
   takerRequestedAta: Address<TAccountTakerRequestedAta>;
   /** maker’s token account for requested_mint (where taker sends payment) */
   makerRequestedAta: Address<TAccountMakerRequestedAta>;
@@ -372,6 +387,7 @@ export type TakeOfferInput<
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
   tokenProgram?: Address<TAccountTokenProgram>;
   systemProgram?: Address<TAccountSystemProgram>;
+  takeAmount: TakeOfferInstructionDataArgs['takeAmount'];
 };
 
 export function getTakeOfferInstruction<
@@ -451,6 +467,9 @@ export function getTakeOfferInstruction<
     ResolvedAccount
   >;
 
+  // Original args.
+  const args = { ...input };
+
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
@@ -481,7 +500,9 @@ export function getTakeOfferInstruction<
       getAccountMeta(accounts.tokenProgram),
       getAccountMeta(accounts.systemProgram),
     ],
-    data: getTakeOfferInstructionDataEncoder().encode({}),
+    data: getTakeOfferInstructionDataEncoder().encode(
+      args as TakeOfferInstructionDataArgs
+    ),
     programAddress,
   } as TakeOfferInstruction<
     TProgramAddress,
@@ -512,7 +533,7 @@ export type ParsedTakeOfferInstruction<
     requestedMint: TAccountMetas[3];
     /** Taker’s token account for offered_mint (they’ll receive maker’s tokens) */
     takerOfferedAta: TAccountMetas[4];
-    /** Taker’s token account holding requested_mint */
+    /** Taker's token account holding requested_mint */
     takerRequestedAta: TAccountMetas[5];
     /** maker’s token account for requested_mint (where taker sends payment) */
     makerRequestedAta: TAccountMetas[6];

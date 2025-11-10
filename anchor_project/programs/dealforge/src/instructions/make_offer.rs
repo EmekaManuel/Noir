@@ -56,6 +56,7 @@ pub fn handler(
     id: u64,
     offered_amount: u64,
     requested_amount: u64,
+    allow_partial: bool,
 ) -> Result<()> {
     require!(offered_amount > 0, DealForgeError::InvalidOfferedMintAmount);
     require!(
@@ -88,6 +89,7 @@ pub fn handler(
         requested_mint: context.accounts.requested_mint.key(),
         offered_amount,
         requested_amount,
+        allow_partial,
         bump: context.bumps.offer,
     });
     Ok(())

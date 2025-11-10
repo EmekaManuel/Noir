@@ -192,11 +192,11 @@ export async function fetchOffersPage(
 
   // Get the subset of addresses for this page
   const pageAddresses = addresses.slice(start, end);
-  
+
   if (pageAddresses.length === 0) {
     return [];
   }
-  
+
   // Decode with Gill SDK - fetchAllOffer should handle parallel fetching
   const decoded = await fetchAllOffer(rpc, pageAddresses);
 

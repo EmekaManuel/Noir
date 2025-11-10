@@ -1,17 +1,17 @@
 "use client";
 
-import { address } from "gill";
 import { useWalletUi } from "@wallet-ui/react";
-import { AppHero } from "@/components/app-hero";
-import { ExplorerLink } from "@/components/cluster/cluster-ui";
-import { ellipsify } from "@/lib/utils";
-import { WalletButton } from "@/components/solana/solana-provider";
+import { address } from "gill";
 import {
   AccountBalance,
   AccountButtons,
   AccountTokens,
   AccountTransactions,
 } from "@/components/account/account-ui";
+import { AppHero } from "@/components/app-hero";
+import { ExplorerLink } from "@/components/cluster/cluster-ui";
+import { WalletButton } from "@/components/solana/solana-provider";
+import { ellipsify } from "@/lib/utils";
 
 export default function ProfilePage() {
   const { account } = useWalletUi();
@@ -58,4 +58,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

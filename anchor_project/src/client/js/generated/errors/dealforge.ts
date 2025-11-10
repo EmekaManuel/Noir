@@ -36,17 +36,26 @@ export const DEALFORGE_ERROR__INVALID_OFFERED_MINT_AMOUNT = 0x1778; // 6008
 export const DEALFORGE_ERROR__INVALID_REQUESTED_MINT_AMOUNT = 0x1779; // 6009
 /** UnauthorizedMaker: unauthorized maker */
 export const DEALFORGE_ERROR__UNAUTHORIZED_MAKER = 0x177a; // 6010
+/** PartialFillsNotAllowed: Partial fills are not allowed for this offer */
+export const DEALFORGE_ERROR__PARTIAL_FILLS_NOT_ALLOWED = 0x177b; // 6011
+/** InvalidTakeAmount: Invalid take amount */
+export const DEALFORGE_ERROR__INVALID_TAKE_AMOUNT = 0x177c; // 6012
+/** ExceedsOfferAmount: Take amount exceeds available offer amount */
+export const DEALFORGE_ERROR__EXCEEDS_OFFER_AMOUNT = 0x177d; // 6013
 
 export type DealforgeError =
   | typeof DEALFORGE_ERROR__CALCULATION_OVERFLOW
   | typeof DEALFORGE_ERROR__EXCEEDS_AVAILABLE_QUANTITY
+  | typeof DEALFORGE_ERROR__EXCEEDS_OFFER_AMOUNT
   | typeof DEALFORGE_ERROR__INSUFFICIENT_BALANCE
   | typeof DEALFORGE_ERROR__INVALID_OFFERED_MINT_AMOUNT
   | typeof DEALFORGE_ERROR__INVALID_REQUESTED_MINT_AMOUNT
   | typeof DEALFORGE_ERROR__INVALID_SALE_TOKEN
+  | typeof DEALFORGE_ERROR__INVALID_TAKE_AMOUNT
   | typeof DEALFORGE_ERROR__OFFER_ALREADY_FULFILLED
   | typeof DEALFORGE_ERROR__OFFER_EXPIRED
   | typeof DEALFORGE_ERROR__OFFER_NOT_ACTIVE
+  | typeof DEALFORGE_ERROR__PARTIAL_FILLS_NOT_ALLOWED
   | typeof DEALFORGE_ERROR__TRANSFER_FAILED
   | typeof DEALFORGE_ERROR__UNAUTHORIZED_MAKER;
 
@@ -55,13 +64,16 @@ if (process.env.NODE_ENV !== 'production') {
   dealforgeErrorMessages = {
     [DEALFORGE_ERROR__CALCULATION_OVERFLOW]: `Calculation overflow`,
     [DEALFORGE_ERROR__EXCEEDS_AVAILABLE_QUANTITY]: `Exceeds available quantity`,
+    [DEALFORGE_ERROR__EXCEEDS_OFFER_AMOUNT]: `Take amount exceeds available offer amount`,
     [DEALFORGE_ERROR__INSUFFICIENT_BALANCE]: `Insufficient token balance`,
     [DEALFORGE_ERROR__INVALID_OFFERED_MINT_AMOUNT]: `Invalid offered mint amount`,
     [DEALFORGE_ERROR__INVALID_REQUESTED_MINT_AMOUNT]: `Invalid requested min amount`,
     [DEALFORGE_ERROR__INVALID_SALE_TOKEN]: `Invalid sale token`,
+    [DEALFORGE_ERROR__INVALID_TAKE_AMOUNT]: `Invalid take amount`,
     [DEALFORGE_ERROR__OFFER_ALREADY_FULFILLED]: `Offer already fulfilled`,
     [DEALFORGE_ERROR__OFFER_EXPIRED]: `Offer expired`,
     [DEALFORGE_ERROR__OFFER_NOT_ACTIVE]: `Offer is not active`,
+    [DEALFORGE_ERROR__PARTIAL_FILLS_NOT_ALLOWED]: `Partial fills are not allowed for this offer`,
     [DEALFORGE_ERROR__TRANSFER_FAILED]: `Token transfer failed`,
     [DEALFORGE_ERROR__UNAUTHORIZED_MAKER]: `unauthorized maker`,
   };

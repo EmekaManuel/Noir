@@ -200,6 +200,10 @@
         {
           "name": "requested_amount",
           "type": "u64"
+        },
+        {
+          "name": "allow_partial",
+          "type": "bool"
         }
       ]
     },
@@ -483,7 +487,7 @@
         {
           "name": "taker_requested_ata",
           "docs": [
-            "Taker’s token account holding requested_mint"
+            "Taker's token account holding requested_mint"
           ],
           "writable": true,
           "pda": {
@@ -701,7 +705,12 @@
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "take_amount",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -774,6 +783,21 @@
       "code": 6010,
       "name": "UnauthorizedMaker",
       "msg": "unauthorized maker"
+    },
+    {
+      "code": 6011,
+      "name": "PartialFillsNotAllowed",
+      "msg": "Partial fills are not allowed for this offer"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidTakeAmount",
+      "msg": "Invalid take amount"
+    },
+    {
+      "code": 6013,
+      "name": "ExceedsOfferAmount",
+      "msg": "Take amount exceeds available offer amount"
     }
   ],
   "types": [
@@ -813,16 +837,23 @@
           {
             "name": "offered_amount",
             "docs": [
-              "Amount of offered tokens"
+              "Amount of offered tokens (remaining)"
             ],
             "type": "u64"
           },
           {
             "name": "requested_amount",
             "docs": [
-              "Amount of requested tokens"
+              "Amount of requested tokens (remaining)"
             ],
             "type": "u64"
+          },
+          {
+            "name": "allow_partial",
+            "docs": [
+              "Whether partial fills are allowed"
+            ],
+            "type": "bool"
           },
           {
             "name": "bump",

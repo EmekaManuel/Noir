@@ -11,6 +11,8 @@ import {
   fixDecoderSize,
   fixEncoderSize,
   getAddressEncoder,
+  getBooleanDecoder,
+  getBooleanEncoder,
   getBytesDecoder,
   getBytesEncoder,
   getProgramDerivedAddress,
@@ -109,12 +111,14 @@ export type MakeOfferInstructionData = {
   id: bigint;
   offeredAmount: bigint;
   requestedAmount: bigint;
+  allowPartial: boolean;
 };
 
 export type MakeOfferInstructionDataArgs = {
   id: number | bigint;
   offeredAmount: number | bigint;
   requestedAmount: number | bigint;
+  allowPartial: boolean;
 };
 
 export function getMakeOfferInstructionDataEncoder(): FixedSizeEncoder<MakeOfferInstructionDataArgs> {
@@ -124,6 +128,7 @@ export function getMakeOfferInstructionDataEncoder(): FixedSizeEncoder<MakeOffer
       ['id', getU64Encoder()],
       ['offeredAmount', getU64Encoder()],
       ['requestedAmount', getU64Encoder()],
+      ['allowPartial', getBooleanEncoder()],
     ]),
     (value) => ({ ...value, discriminator: MAKE_OFFER_DISCRIMINATOR })
   );
@@ -135,6 +140,7 @@ export function getMakeOfferInstructionDataDecoder(): FixedSizeDecoder<MakeOffer
     ['id', getU64Decoder()],
     ['offeredAmount', getU64Decoder()],
     ['requestedAmount', getU64Decoder()],
+    ['allowPartial', getBooleanDecoder()],
   ]);
 }
 
@@ -171,6 +177,7 @@ export type MakeOfferAsyncInput<
   id: MakeOfferInstructionDataArgs['id'];
   offeredAmount: MakeOfferInstructionDataArgs['offeredAmount'];
   requestedAmount: MakeOfferInstructionDataArgs['requestedAmount'];
+  allowPartial: MakeOfferInstructionDataArgs['allowPartial'];
 };
 
 export async function getMakeOfferInstructionAsync<
@@ -339,6 +346,7 @@ export type MakeOfferInput<
   id: MakeOfferInstructionDataArgs['id'];
   offeredAmount: MakeOfferInstructionDataArgs['offeredAmount'];
   requestedAmount: MakeOfferInstructionDataArgs['requestedAmount'];
+  allowPartial: MakeOfferInstructionDataArgs['allowPartial'];
 };
 
 export function getMakeOfferInstruction<

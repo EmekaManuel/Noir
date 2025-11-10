@@ -16,12 +16,13 @@ pub mod dealforge {
         id: u64,
         offered_amount: u64,
         requested_amount: u64,
+        allow_partial: bool,
     ) -> Result<()> {
-        make_offer::handler(context, id, offered_amount, requested_amount)
+        make_offer::handler(context, id, offered_amount, requested_amount, allow_partial)
     }
 
-    pub fn take_offer(context: Context<TakeOffer>) -> Result<()> {
-        take_offer::handler(context)
+    pub fn take_offer(context: Context<TakeOffer>, take_amount: u64) -> Result<()> {
+        take_offer::handler(context, take_amount)
     }
 
     pub fn refund_offer(context: Context<RefundOffer>) -> Result<()> {

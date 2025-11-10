@@ -24,4 +24,10 @@ pub enum DealForgeError {
     InvalidRequestedMintAmount,
     #[msg("unauthorized maker")]
     UnauthorizedMaker,
+    #[msg("Partial fills are not allowed for this offer")]
+    PartialFillsNotAllowed,
+    #[msg("Invalid take amount")]
+    InvalidTakeAmount,
+    #[msg("Take amount exceeds available offer amount")]
+    ExceedsOfferAmount,
 }

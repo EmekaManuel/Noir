@@ -1,11 +1,12 @@
 "use client";
 
 import { useWalletUi } from "@wallet-ui/react";
+import { FileText, LayoutDashboard, Menu, Plus, User } from "lucide-react";
 import Link from "next/link";
-import { Menu, LayoutDashboard, Plus, FileText, User } from "lucide-react";
 import { useState } from "react";
 import { WalletButton } from "@/components/solana/solana-provider";
 import { ThemeSelect } from "@/components/theme-select";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -13,7 +14,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 
 export function NoirHeader() {
   const { account } = useWalletUi();
@@ -26,8 +26,11 @@ export function NoirHeader() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/60">
             <span className="font-bold text-primary-foreground text-sm">N</span>
           </div>
-          <Link href="/" className="font-semibold text-xl tracking-tight hover:opacity-80 transition-opacity">
-            Noir 
+          <Link
+            className="font-semibold text-xl tracking-tight transition-opacity hover:opacity-80"
+            href="/"
+          >
+            Noir
           </Link>
         </div>
         <nav className="hidden items-center gap-6 md:flex">
@@ -67,35 +70,37 @@ export function NoirHeader() {
           <div className="hidden sm:block">
             <WalletButton />
           </div>
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <Sheet onOpenChange={setMobileMenuOpen} open={mobileMenuOpen}>
             <SheetTrigger asChild>
               <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden h-9 w-9 hover:bg-muted/50"
                 aria-label="Toggle menu"
+                className="h-9 w-9 hover:bg-muted/50 md:hidden"
+                size="icon"
+                variant="ghost"
               >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[320px] sm:w-[400px] p-0">
-              <div className="flex flex-col h-full">
-                <SheetHeader className="px-6 pt-6 pb-4 border-b">
-                  <SheetTitle className="text-xl font-semibold">Menu</SheetTitle>
+            <SheetContent className="w-[320px] p-0 sm:w-[400px]" side="right">
+              <div className="flex h-full flex-col">
+                <SheetHeader className="border-b px-6 pt-6 pb-4">
+                  <SheetTitle className="font-semibold text-xl">
+                    Menu
+                  </SheetTitle>
                 </SheetHeader>
-                <nav className="flex-1 px-4 py-6 overflow-y-auto">
+                <nav className="flex-1 overflow-y-auto px-4 py-6">
                   <div className="flex flex-col gap-1">
                     <Link
+                      className="group flex items-center gap-3 rounded-lg px-4 py-3 font-medium text-muted-foreground text-sm transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                       href="/dashboard"
-                      className="group flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <LayoutDashboard className="h-5 w-5 shrink-0 transition-colors group-hover:text-foreground" />
                       <span>Browse Deals</span>
                     </Link>
                     <Link
+                      className="group flex items-center gap-3 rounded-lg px-4 py-3 font-medium text-muted-foreground text-sm transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                       href="/dashboard/create-offer"
-                      className="group flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <Plus className="h-5 w-5 shrink-0 transition-colors group-hover:text-foreground" />
@@ -104,16 +109,16 @@ export function NoirHeader() {
                     {account && (
                       <>
                         <Link
+                          className="group flex items-center gap-3 rounded-lg px-4 py-3 font-medium text-muted-foreground text-sm transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                           href="/dashboard/my-deals"
-                          className="group flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           <FileText className="h-5 w-5 shrink-0 transition-colors group-hover:text-foreground" />
                           <span>My Deals</span>
                         </Link>
                         <Link
+                          className="group flex items-center gap-3 rounded-lg px-4 py-3 font-medium text-muted-foreground text-sm transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                           href="/profile"
-                          className="group flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-all hover:bg-muted/50 hover:text-foreground active:bg-muted"
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           <User className="h-5 w-5 shrink-0 transition-colors group-hover:text-foreground" />
@@ -122,10 +127,10 @@ export function NoirHeader() {
                       </>
                     )}
                   </div>
-                  
-                  <div className="mt-6 pt-6 border-t space-y-3">
+
+                  <div className="mt-6 space-y-3 border-t pt-6">
                     <div className="px-2">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3 px-2">
+                      <p className="mb-3 px-2 font-medium text-muted-foreground text-xs uppercase tracking-wider">
                         Settings
                       </p>
                       <div className="space-y-2">

@@ -160,6 +160,7 @@ export async function createTestOffer({
   makerTokenAccount,
   tokenOfferedAmount,
   tokenRequestedAmount,
+  allowPartial = false,
   skipPreflight = false,
 }: {
   maker: KeyPairSigner;
@@ -168,6 +169,7 @@ export async function createTestOffer({
   makerTokenAccount: Address;
   tokenOfferedAmount: bigint;
   tokenRequestedAmount: bigint;
+  allowPartial?: boolean;
   skipPreflight?: boolean;
 }) {
   const offerId = getRandomBigInt();
@@ -192,6 +194,7 @@ export async function createTestOffer({
     vault,
     offeredAmount: tokenOfferedAmount,
     requestedAmount: tokenRequestedAmount,
+    allowPartial,
     tokenProgram,
   });
   const signature = await createAndConfirmTransaction({

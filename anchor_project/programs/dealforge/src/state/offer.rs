@@ -18,11 +18,14 @@ pub struct Offer {
     /// The token mint that initializer is requesting
     pub requested_mint: Pubkey,
 
-    /// Amount of offered tokens
+    /// Amount of offered tokens (remaining)
     pub offered_amount: u64,
 
-    /// Amount of requested tokens
+    /// Amount of requested tokens (remaining)
     pub requested_amount: u64,
+
+    /// Whether partial fills are allowed
+    pub allow_partial: bool,
 
     /// Expiry timestamp (unix time), after which initializer can cancel
     // pub expiry: i64,

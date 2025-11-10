@@ -206,6 +206,10 @@ export type Dealforge = {
         {
           "name": "requestedAmount",
           "type": "u64"
+        },
+        {
+          "name": "allowPartial",
+          "type": "bool"
         }
       ]
     },
@@ -489,7 +493,7 @@ export type Dealforge = {
         {
           "name": "takerRequestedAta",
           "docs": [
-            "Taker’s token account holding requested_mint"
+            "Taker's token account holding requested_mint"
           ],
           "writable": true,
           "pda": {
@@ -707,7 +711,12 @@ export type Dealforge = {
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "takeAmount",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -780,6 +789,21 @@ export type Dealforge = {
       "code": 6010,
       "name": "unauthorizedMaker",
       "msg": "unauthorized maker"
+    },
+    {
+      "code": 6011,
+      "name": "partialFillsNotAllowed",
+      "msg": "Partial fills are not allowed for this offer"
+    },
+    {
+      "code": 6012,
+      "name": "invalidTakeAmount",
+      "msg": "Invalid take amount"
+    },
+    {
+      "code": 6013,
+      "name": "exceedsOfferAmount",
+      "msg": "Take amount exceeds available offer amount"
     }
   ],
   "types": [
@@ -819,16 +843,23 @@ export type Dealforge = {
           {
             "name": "offeredAmount",
             "docs": [
-              "Amount of offered tokens"
+              "Amount of offered tokens (remaining)"
             ],
             "type": "u64"
           },
           {
             "name": "requestedAmount",
             "docs": [
-              "Amount of requested tokens"
+              "Amount of requested tokens (remaining)"
             ],
             "type": "u64"
+          },
+          {
+            "name": "allowPartial",
+            "docs": [
+              "Whether partial fills are allowed"
+            ],
+            "type": "bool"
           },
           {
             "name": "bump",

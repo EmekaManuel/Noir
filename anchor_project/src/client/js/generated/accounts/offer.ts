@@ -17,6 +17,8 @@ import {
   fixEncoderSize,
   getAddressDecoder,
   getAddressEncoder,
+  getBooleanDecoder,
+  getBooleanEncoder,
   getBytesDecoder,
   getBytesEncoder,
   getStructDecoder,
@@ -57,10 +59,12 @@ export type Offer = {
   offeredMint: Address;
   /** The token mint that initializer is requesting */
   requestedMint: Address;
-  /** Amount of offered tokens */
+  /** Amount of offered tokens (remaining) */
   offeredAmount: bigint;
-  /** Amount of requested tokens */
+  /** Amount of requested tokens (remaining) */
   requestedAmount: bigint;
+  /** Whether partial fills are allowed */
+  allowPartial: boolean;
   /**
    * Expiry timestamp (unix time), after which initializer can cancel
    * PDA bump seed (to derive vault PDA)
@@ -77,10 +81,12 @@ export type OfferArgs = {
   offeredMint: Address;
   /** The token mint that initializer is requesting */
   requestedMint: Address;
-  /** Amount of offered tokens */
+  /** Amount of offered tokens (remaining) */
   offeredAmount: number | bigint;
-  /** Amount of requested tokens */
+  /** Amount of requested tokens (remaining) */
   requestedAmount: number | bigint;
+  /** Whether partial fills are allowed */
+  allowPartial: boolean;
   /**
    * Expiry timestamp (unix time), after which initializer can cancel
    * PDA bump seed (to derive vault PDA)
@@ -98,6 +104,7 @@ export function getOfferEncoder(): FixedSizeEncoder<OfferArgs> {
       ['requestedMint', getAddressEncoder()],
       ['offeredAmount', getU64Encoder()],
       ['requestedAmount', getU64Encoder()],
+      ['allowPartial', getBooleanEncoder()],
       ['bump', getU8Encoder()],
     ]),
     (value) => ({ ...value, discriminator: OFFER_DISCRIMINATOR })
@@ -113,6 +120,7 @@ export function getOfferDecoder(): FixedSizeDecoder<Offer> {
     ['requestedMint', getAddressDecoder()],
     ['offeredAmount', getU64Decoder()],
     ['requestedAmount', getU64Decoder()],
+    ['allowPartial', getBooleanDecoder()],
     ['bump', getU8Decoder()],
   ]);
 }
@@ -175,5 +183,5 @@ export async function fetchAllMaybeOffer(
 }
 
 export function getOfferSize(): number {
-  return 129;
+  return 130;
 }
